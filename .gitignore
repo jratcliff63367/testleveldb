@@ -7,3 +7,5 @@
 /*.bak
 /bin/Debug
 /include/*.bak
+/bin/Release
+/compiler/vc14win64
