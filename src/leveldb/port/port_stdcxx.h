@@ -95,9 +95,8 @@ inline bool Snappy_Compress(const char* input, size_t length,
 #else
   // Silence compiler warnings about unused arguments.
   (void)input; (void)length; (void)output;
+    return false;
 #endif  // HAVE_SNAPPY
-
-  return false;
 }
 
 inline bool Snappy_GetUncompressedLength(const char* input, size_t length,

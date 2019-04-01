@@ -29,6 +29,10 @@
 #include "util/mutexlock.h"
 #include "util/windows_logger.h"
 
+#ifdef _MSC_VER
+#pragma warning(disable:4722)
+#endif
+
 #if defined(DeleteFile)
 #undef DeleteFile
 #endif  // defined(DeleteFile)

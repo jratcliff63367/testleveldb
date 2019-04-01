@@ -38,6 +38,11 @@ elseif (MSVC)
     add_definitions(-DLEVELDB_COMPILE_LIBRARY)
     add_definitions(-DLEVELDB_PLATFORM_WINDOWS=1)
     add_definitions(-DLEVELDB_IS_BIG_ENDIAN=0)
+    add_definitions(-DHAVE_CRC32C=0)
+    add_definitions(-DHAVE_SNAPPY=1)
+    add_definitions(-DHAVE_FULLFSYNC=0)
+    add_definitions(-DHAVE_FDATASYNC=0)
+    add_definitions(-DHAVE_CONFIG_H=1)
 
     # config-specific preprocessor definitions
     set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS
@@ -87,6 +92,7 @@ file (GLOB_RECURSE stltracking_EXTERNAL_SOURCES
 file (GLOB_RECURSE leveldb_EXTERNAL_SOURCES
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     include/leveldb/*.h
+    include /snappy/*.h
     src/leveldb/util/*.h
     src/leveldb/util/*.cc
     src/leveldb/db/*.h
@@ -95,6 +101,13 @@ file (GLOB_RECURSE leveldb_EXTERNAL_SOURCES
     src/leveldb/table/*.cc
     src/leveldb/port/*.h
     src/leveldb/port/*.cc
+    src/snappy/config.h
+    src/snappy/snappy-c.cc
+    src/snappy/snappy-internal.h
+    src/snappy/snappy-sinksource.cc
+    src/snappy/src/snappy/snappy-stubs-internal.cc
+    src/snappy/snappy-stubs-internal.h
+    src/snappy/snappy.cc
 )
 
 
@@ -155,7 +168,9 @@ target_include_directories(stltracking PUBLIC
     ${stltracking_EXT_ROOT}
     ${stltracking_EXT_ROOT}/stltracking
     ${stltracking_ROOT}/include
+    ${stltracking_ROOT}/include/snappy
     ${stltracking_ROOT}/src/leveldb
+    ${stltracking_ROOT}/src/snappy
     ${extra_INCLUDE}
 )
 
