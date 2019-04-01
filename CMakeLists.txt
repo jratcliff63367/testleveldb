@@ -35,6 +35,9 @@ elseif (MSVC)
 
     # generic preprocessor definitions
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-DLEVELDB_COMPILE_LIBRARY)
+    add_definitions(-DLEVELDB_PLATFORM_WINDOWS=1)
+    add_definitions(-DLEVELDB_IS_BIG_ENDIAN=0)
 
     # config-specific preprocessor definitions
     set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS
@@ -81,6 +84,20 @@ file (GLOB_RECURSE stltracking_EXTERNAL_SOURCES
     ext/stltracking/*.cpp
 )
 
+file (GLOB_RECURSE leveldb_EXTERNAL_SOURCES
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    include/leveldb/*.h
+    src/leveldb/util/*.h
+    src/leveldb/util/*.cc
+    src/leveldb/db/*.h
+    src/leveldb/db/*.cc
+    src/leveldb/table/*.h
+    src/leveldb/table/*.cc
+    src/leveldb/port/*.h
+    src/leveldb/port/*.cc
+)
+
+
 set(Shared_SOURCES
 )
 
@@ -106,6 +123,15 @@ foreach(source IN LISTS stltracking_EXTERNAL_SOURCES)
     source_group("${source_path_msvc}" FILES "${source}")
 endforeach()
 
+#message("External sources:\n${leveldb_EXTERNAL_SOURCES}")
+
+# deal with subdirectories in external sources
+foreach(source IN LISTS leveldb_EXTERNAL_SOURCES)
+    get_filename_component(source_path "${source}" PATH)
+    string(REPLACE "/" "\\" source_path_msvc "${source_path}")
+    source_group("${source_path_msvc}" FILES "${source}")
+endforeach()
+
 # deal with subdirectories in sources
 foreach(source IN LISTS stltracking_SOURCES)
     get_filename_component(source_path "${source}" PATH)
@@ -119,6 +145,7 @@ endforeach()
 
 add_executable(stltracking
     ${stltracking_EXTERNAL_SOURCES}
+    ${leveldb_EXTERNAL_SOURCES}
     ${stltracking_SOURCES}
     ${Platform_SOURCES}
     ${Shared_SOURCES}
@@ -128,6 +155,7 @@ target_include_directories(stltracking PUBLIC
     ${stltracking_EXT_ROOT}
     ${stltracking_EXT_ROOT}/stltracking
     ${stltracking_ROOT}/include
+    ${stltracking_ROOT}/src/leveldb
     ${extra_INCLUDE}
 )
 
